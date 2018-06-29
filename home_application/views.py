@@ -34,3 +34,9 @@ def contactus(request):
     联系我们
     """
     return render_mako_context(request, '/home_application/contact.html')
+
+def bktest2(request):
+    """
+    bktest2
+    """
+    return render_mako_context(request, '/home_application/bktest2.html')
