@@ -9,8 +9,10 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 See the License for the specific language governing permissions and limitations under the License.
 """
 
-from common.mymako import render_mako_context
+from common.mymako import render_mako_context, render_json
 from django.http import HttpResponse
+from home_application.models import Mynewinformation
+
 
 def index(request):
     return HttpResponse("bktest2")
@@ -39,4 +41,17 @@ def bktest2(request):
     """
     bktest2
     """
-    return render_mako_context(request, '/home_application/bktest2.html')
+    data = Mynewinformation.objects.all()
+    return render_mako_context(request, '/home_application/bktest2.html',{'data':data})
+    #return render_mako_context(request, '/home_application/bktest2.html')
+
+def submit_info(request):
+    #if request.method == "POST":
+    #    return HttpResponse('congratulation!')
+    name_info = request.POST.get('name_info')
+    age_info = request.POST.get('age_info')
+    sexy_info = request.POST.get('sexy_info')
+    Mynewinformation.objects.create(name=name_info, age=age_info,
+                                    sexy=sexy_info)
+    return render_json({'result': True})
+

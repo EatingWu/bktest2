@@ -15,6 +15,7 @@ urlpatterns = patterns(
     'home_application.views',
     #(r'^$', 'home'),
     (r'^bktest2/$', 'bktest2'),
+    (r'^submit_info/$', 'submit_info'),
     (r'^dev-guide/$', 'dev_guide'),
-    (r'^contactus/$', 'contactus'),
+    (r'^contactus/$', 'contactus')
 )

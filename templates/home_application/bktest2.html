@@ -30,8 +30,175 @@
     <![endif]-->
     <!-- 数据埋点统计 -->
     <script src="https://magicbox.bkclouds.cc/static_api/analysis.js"></script>
+    <script type="text/javascript">
+	    	var app_id = "${APP_ID}";
+			var site_url = "${SITE_URL}";	  // app的url前缀,在ajax调用的时候，应该加上该前缀
+			var static_url = "${STATIC_URL}"; // 静态资源前缀
+    </script>
 </head>
 <body>
-<div>欢迎使用Magic Box</div>
+<div class="panel panel-default table7_demo king-table7-demo3">
+    <div class="panel-heading">
+        学生列表
+    </div>
+    <div class="panel-body">
+        <div class="king-wrapper clearfix">
+            <form class="form-inline king-search-form king-no-bg pull-left">
+
+                <div class="form-group">
+                    <div class="input-group king-input-group">
+                        <input class="form-control pl30 king-form-control" placeholder="请输入关键字" type="text">
+                        <span class="glyphicon glyphicon-search form-control-feedback king-form-control-feedback"></span>
+                    </div>
+                </div>
+
+            </form>
+            <a href="javascript:void(0);" class="king-btn king-btn-new pull-right">
+                    新建模板
+                </a>
+        </div>
+    </div>
+    <div>
+        <table class="table table-hover mb0">
+            <thead>
+                <tr class="active">
+                    <th style="width:10%">ID</th>
+                    <th style="width:20%">学生姓名</th>
+                    <th style="width:20%">年龄</th>
+                    <th style="width:20%">性别</th>
+                    <th style="">操作</th>
+                </tr>
+            </thead>
+            <tbody id="datas">
+                % for i in data:
+                    <tr align="center">
+                        <td>${i.id}</td>
+                        <td>${i.name}</td>
+                        <td>${i.age}</td>
+                        <td>${i.sexy}</td>
+                    </tr>
+                % endfor
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="5">
+                        <div class="pull-right king-page-box">
+                            <p class="pull-left mt15 mr15">
+                                共<span id="total">25</span>条记录，当前第<span id="cur_page">1</span>/<span id="total_page">5</span>页
+                            </p>
+                            <ul class="pagination pagination-sm pull-left mt10">
+                                <li class="disabled">
+                                    <a href="javascript:;" aria-label="Previous">
+                                        <span aria-hidden="true">«</span>
+                                    </a>
+                                </li>
+                                <li class="active"><a href="javascript:;">1</a></li>
+                                <li><a href="javascript:;">2</a></li>
+                                <li><a href="javascript:;">3</a></li>
+                                <li><a href="javascript:;">4</a></li>
+                                <li><a href="javascript:;">5</a></li>
+                                <li>
+                                    <a href="javascript:;" aria-label="Next">
+                                        <span aria-hidden="true">»</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+<div class="king-block king-block-bordered">
+    <div class="king-block-header king-gray-light">
+        <ul class="king-block-options">
+            <li>
+                <button type="button"><i class="fa fa-cog"></i></button>
+            </li>
+        </ul>
+        <h3 class="king-block-title">填写个人信息</h3>
+    </div>
+    <div class="king-block-content">
+        <form class="form-horizontal" method="POST">
+            <div class="form-group">
+                <label for="inputName" class="col-sm-3 control-label">学生姓名：</label>
+                <div class="col-sm-7">
+                    <input class="form-control" id="inputName" placeholder="" type="text">
+                </div>
+                <span class="text-danger mt5 fl">*</span>
+            </div>
+            <div class="form-group">
+                <label for="inputAge" class="col-sm-3 control-label">年龄：</label>
+                <div class="col-sm-7">
+                    <input class="form-control" id="inputAge" placeholder="" type="number">
+
+                </div>
+                <span class="text-danger mt5 fl">*</span>
+            </div>
+            <div class="form-group">
+                <label for="inputSexy" class="col-sm-3 control-label">性别：</label>
+                <div class="col-sm-7">
+                    <input class="form-control" id="inputSexy" placeholder="" type="text">
+                </div>
+            </div>
+
+
+
+
+            <div class="form-group">
+                <div class="col-sm-7 col-sm-offset-3">
+                    <input class="king-btn king-success mr10" value="提交" type="button" onclick="submit_info()">
+                    <input class="king-btn king-default" value="取消" type="reset">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 </body>
+<script>
+    // using jQuery
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+
+    function submit_info(){
+        var name_info = $("#inputName").val();
+        var age_info = $("#inputAge").val();
+        var sexy_info = $("#inputSexy").val();
+        $.post(site_url + 'submit_info/', {
+            'name_info': name_info, 'age_info': age_info,
+            'sexy_info': sexy_info
+        }, function (res) {
+            if (res.result) {
+                alert('提交成功！');
+                window.location.reload();
+            }
+        }, 'json');
+    }
+</script>
 </html>
